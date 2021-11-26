@@ -1,5 +1,18 @@
 from fastapi import FastAPI, Path, Query
+from fastapi.middleware.cors import CORSMiddleware
+
+
 app = FastAPI()
+
+origins = ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # This is the code responsible for translation
 from googletrans import Translator
@@ -24,4 +37,5 @@ def index():
 @app.get("/translation")
 def get_translation(sentence : str, source :str = None, destination = "sw"):
     translated = translate_it(sentence, source, destination)
-    return {"data":translated.text}
+    print(translated)
+    return translated.text
